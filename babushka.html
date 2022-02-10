@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <title>Bistro Babushka</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        background-color: rgb(207, 149, 82);
+      }
+
+      #main_section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 0.5rem;
+      }
+
+      header {
+        background-color: #ffff;
+        padding-bottom: 20px;
+        padding-top: 20px;
+        margin-bottom: 10px;
+      }
+
+      img {
+        max-width: 100%;
+        object-fit: cover;
+      }
+
+      header h1 {
+        color: rgb(218, 4, 4);
+        text-align: center;
+        font-family: "Rowdies", cursive;
+        animation: moveDown 1s ease-in-out forwards;
+        opacity: 0;
+      }
+
+      article {
+        position: relative;
+        overflow: hidden;
+      }
+
+      article .overlay-content {
+        width: 100%;
+        max-height: 100%;
+        background-color: rgb(218, 4, 4);
+        color: #ffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        overflow: hidden;
+        position: absolute;
+        z-index: 1;
+        transition-duration: 0.5s;
+        top: -36%;
+        left: 0;
+        opacity: 75%;
+        cursor: pointer;
+      }
+
+      article .overlay-content p {
+        display: block;
+        letter-spacing: normal;
+        font-size: 1.2rem;
+        font-weight: bolder;
+        margin: 2rem;
+        letter-spacing: 1px;
+        line-height: 1.75rem;
+        padding-top: 20px;
+      }
+
+      article:hover .overlay-content {
+        transform: translateY(100%);
+      }
+
+      article {
+        padding: 0.5rem;
+        background-color: rgb(165, 87, 42);
+        color: #ffff;
+        font-weight: 100;
+        margin: 20px;
+        border-radius: 2%;
+        font-family: "Rowdies", cursive;
+        animation: moveDown 1s ease-in-out forwards;
+        opacity: 0;
+      }
+
+      #overskrift {
+        text-align: center;
+        color: rgb(218, 4, 4);
+        font-family: "Rowdies", cursive;
+        animation: moveDown 1s ease-in-out forwards;
+        opacity: 0;
+      }
+
+      section nav {
+        display: flex;
+        flex-direction: column;
+        padding: 3em;
+        margin-left: 4em;
+        margin-right: 4em;
+        gap: 1em;
+      }
+
+      button:hover {
+        background-color: rgb(218, 4, 4);
+        color: rgb(255, 136, 0);
+        border-color: rgb(218, 4, 4);
+        border-radius: 8%;
+        border-style: double;
+        font-size: 18px;
+        margin-bottom: 5px;
+        text-align: center;
+        padding: 4px;
+      }
+
+      button {
+        color: #ffff;
+        border-radius: 8%;
+        border-style: double;
+        border-color: rgb(165, 87, 42);
+        font-size: 18px;
+        background-color: rgb(165, 87, 42);
+        margin-bottom: 5px;
+        text-align: center;
+        padding: 4px;
+        font-family: "Rowdies", cursive;
+        animation: moveDown 1s ease-in-out forwards;
+        opacity: 0;
+      }
+
+      #popup {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+        overflow: scroll;
+        margin-left: 0rem;
+        margin-right: 0rem;
+      }
+
+      #popup_article {
+        width: 100vw;
+        display: grid;
+        padding: 15px;
+        margin: 4rem auto;
+        border-radius: 25px;
+        background-color: rgb(165, 87, 42);
+      }
+
+      #luk {
+        font-size: 1.5em;
+        color: rgb(165, 87, 42);
+        cursor: pointer;
+        background-color: rgb(255, 136, 0);
+        border-radius: 5px;
+        padding: 0.2em;
+        margin-left: 4em;
+        margin-right: 4em;
+        padding-left: 4em;
+      }
+
+      #luk:hover {
+        font-size: 1.5em;
+        color: rgb(255, 136, 0);
+        cursor: pointer;
+        padding: 3px;
+        background-color: rgb(218, 4, 4);
+        border-radius: 5px;
+        padding: 0.2em;
+        margin-left: 4em;
+        margin-right: 4em;
+        padding-left: 4em;
+      }
+
+      .hide {
+        display: none;
+      }
+
+      #popup_article h2 {
+        text-align: center;
+        color: #ffff;
+      }
+
+      #popup_article h4 {
+        color: #ffff;
+      }
+
+      #popup_article .pris {
+        color: #ffff;
+        padding-top: 10px;
+        padding-left: 10px;
+      }
+
+      #popup_article .beskrivelse {
+        color: #ffff;
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-bottom: 10px;
+      }
+
+      #popup_article .beskrivelse1 {
+        padding-top: 10px;
+        padding-left: 10px;
+      }
+
+      @keyframes introLoad {
+        from {
+          clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        }
+        to {
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+      }
+
+      @keyframes moveDown {
+        from {
+          transform: translateY(-100px);
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (min-width: 900px) {
+        #main_section {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 0.2rem;
+        }
+
+        section {
+          margin-left: 13rem;
+          margin-right: 13rem;
+        }
+
+        section nav {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+          gap: 0.5rem;
+        }
+
+        article {
+          background-color: rgb(165, 87, 42);
+          color: #ffff;
+          animation: moveDown 1s ease-in-out forwards;
+          opacity: 0;
+        }
+
+        button:hover {
+          background-color: rgb(218, 4, 4);
+          border-color: rgb(218, 4, 4);
+          border-radius: 8%;
+          border-style: double;
+          font-size: 18px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+          place-content: center;
+          padding: 4px;
+        }
+
+        button {
+          border-radius: 8%;
+          border-style: double;
+          border-color: rgb(165, 87, 42);
+          color: #ffff;
+          font-size: 18px;
+          background-color: rgb(165, 87, 42);
+          margin-right: 5px;
+          margin-bottom: 5px;
+          text-align: center;
+          padding: 4px;
+          animation: moveDown 1s ease-in-out forwards;
+          opacity: 0;
+        }
+
+        #overskrift {
+          text-align: center;
+          animation: moveDown 1s ease-in-out forwards;
+          opacity: 0;
+        }
+
+        article .overlay-content p {
+          display: block;
+          letter-spacing: normal;
+          font-size: 1.2rem;
+          font-weight: bolder;
+          margin: 1.2rem;
+          letter-spacing: 1px;
+          line-height: 1.75rem;
+        }
+
+        #popup {
+          display: none;
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: rgba(0, 0, 0, 0.8);
+          overflow: scroll;
+          margin-left: 0rem;
+          margin-right: 0rem;
+        }
+
+        #popup_article {
+          width: 50vw;
+          display: grid;
+          padding: 15px;
+          margin: 4rem auto;
+          border-radius: 25px;
+          background-color: rgb(165, 87, 42);
+        }
+
+        #luk {
+          /* position: fixed; */
+          font-size: 1.8em;
+          color: rgb(165, 87, 42);
+          cursor: pointer;
+          background-color: rgb(255, 136, 0);
+          border-radius: 5px;
+          padding: 0.6em;
+          margin-left: 8em;
+          margin-right: 8em;
+          padding-left: 3.3em;
+        }
+
+        #luk:hover {
+          /* position: fixed; */
+          font-size: 1.8em;
+          color: rgb(255, 136, 0);
+          cursor: pointer;
+          background-color: rgb(218, 4, 4);
+          border-radius: 5px;
+          padding: 0.6em;
+          margin-left: 8em;
+          margin-right: 8em;
+          padding-left: 3.3em;
+        }
+
+        #popup_article img {
+          max-width: 100%;
+          padding: 20px;
+        }
+
+        #popup_article h2 {
+          text-align: center;
+        }
+
+        #popup_article .pris {
+          padding-top: 10px;
+          padding-left: 20px;
+        }
+
+        #popup_article .beskrivelse {
+          padding-top: 10px;
+          padding-left: 20px;
+          padding-bottom: 10px;
+        }
+
+        #popup_article .beskrivelse1 {
+          padding-top: 10px;
+          padding-left: 20px;
+        }
+
+        #splashbillede_section {
+          width: 100%;
+          height: 40vh;
+          background-image: linear-gradient(
+              to top,
+              rgba(112, 112, 112, 0.533),
+              rgba(59, 59, 59, 0.2)
+            ),
+            url(medium/bondeboller-md.jpg);
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: 5% 80%;
+          animation: introLoad 2s forwards;
+        }
+
+        #splashbillede_section h1 {
+          padding-left: 20px;
+          margin-top: 0.5em;
+          color: rgb(218, 4, 4);
+          font-size: 7rem;
+          text-align: center;
+          animation: moveDown 1s ease-in-out forwards;
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <header id="splashbillede_section"><h1>Bistro Babushka</h1></header>
+  <body>
+    <section>
+      <nav>
+        <button data-kategori="alle" class="valgt1">Alle</button>
+        <button data-kategori="drikkevarer" class="">Drikkevarer</button>
+        <button data-kategori="desserter" class="">Desserter</button>
+        <button data-kategori="hovedretter" class="">Hovedretter</button>
+        <button data-kategori="sideorders" class="">Sideorders</button>
+        <button data-kategori="forretter" class="">Forretter</button>
+      </nav>
+    </section>
+    <h1 id="overskrift">Menu</h1>
+    <main>
+      <section id="main_section">
+        <template id="main_template">
+          <article>
+            <img src="" alt="" />
+            <h3></h3>
+            <p></p>
+            <p></p>
+            <div class="overlay-content">
+              <p>Læs Mere</p>
+            </div>
+          </article>
+        </template>
+      </section>
+    </main>
+    <section id="popup">
+      <article id="popup_article">
+        <h2></h2>
+        <img src="" alt="" />
+        <h3 class="pris"></h3>
+        <h4 class="beskrivelse1">Beskrivelse:</h4>
+        <p class="beskrivelse"></p>
+        <div id="luk">Luk</div>
+      </article>
+    </section>
+    <script>
+      //fastlæg variabler som skal bruges senere til at fylde indhold ind i
+      document.addEventListener("DOMContentLoaded", start);
+      let madliste;
+      let filter = "alle";
+
+      function start() {
+        console.log("start");
+
+        async function hentData() {
+          const resultat = await fetch(fil, options);
+          madliste = await resultat.json();
+          visMadListe();
+        }
+
+        const container = document.querySelector("section");
+        //json fil, og key til fil
+        const fil = "https://babushka-dd8a.restdb.io/rest/menu";
+        const key = "600ec2fb1346a1524ff12de4";
+        const options = { headers: { "x-apikey": key } };
+
+        const filterknapper = document.querySelectorAll("nav button");
+        filterknapper.forEach((knap) =>
+          knap.addEventListener("click", filtrerRetter)
+        );
+        hentData(fil);
+      }
+
+      function filtrerRetter() {
+        console.log(this);
+
+        filter = this.dataset.kategori;
+        document.querySelector(".valgt1").classList.remove("valgt1");
+        this.classList.add("valgt1");
+
+        visMadListe();
+
+        document.querySelector("#overskrift").textContent = this.textContent;
+      }
+
+      const container = document.querySelector("#main_section");
+      const template = document.querySelector("#main_template");
+      function visMadListe() {
+        console.log("Retter loaded");
+
+        container.textContent = "";
+
+        madliste.forEach((mad) => {
+          if (filter == mad.kategori || filter == "alle") {
+            const klon = template.cloneNode(true).content;
+            klon.querySelector("h3").textContent = `${mad.navn}`;
+            klon.querySelector("img").src =
+              "medium/" + mad.billednavn + "-md.jpg";
+            klon.querySelector(
+              "article p"
+            ).textContent = `${mad.kortbeskrivelse}`;
+            klon.querySelector(
+              "article p:nth-of-type(2)"
+            ).textContent = `Pris: ${mad.pris} kr.`;
+            klon
+              .querySelector("article")
+              .addEventListener("click", () => visPopup(mad));
+
+            container.appendChild(klon);
+          }
+        });
+      }
+      document
+        .querySelector("#popup")
+        .addEventListener("click", () => (popup.style.display = "none"));
+
+      function visPopup(mad) {
+        console.log(mad);
+        popup.style.display = "block";
+        popup.querySelector("img").src = "medium/" + mad.billednavn + "-md.jpg";
+        popup.querySelector("h2").textContent = mad.navn;
+        popup.querySelector("h3").textContent = `Pris: ${mad.pris} kr.`;
+        popup.querySelector("p").textContent = mad.langbeskrivelse;
+        document.querySelector("article:hover .overlay-content").style.display =
+          "";
+      }
+    </script>
+  </body>
+</html>
